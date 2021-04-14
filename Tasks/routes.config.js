@@ -7,7 +7,7 @@ exports.routesConfig = function(app) {
     app.get('/tasks/:taskId', [
         TaskController.getById
     ]);
-    app.get('/tasks', [
+    app.get('/tasks:page', [
         TaskController.listAll
     ]);
     app.delete('/tasks/:taskId', [
@@ -15,5 +15,8 @@ exports.routesConfig = function(app) {
     ])
     app.patch('/tasks/:taskId', [
         TaskController.Patch
+    ])
+    app.get('/tasks/count', [
+        TaskController.Count
     ])
 };

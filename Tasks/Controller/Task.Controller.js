@@ -18,7 +18,7 @@ exports.getById = (req, res) => {
 };
 
 exports.listAll = async(req, res) => {
-    await TaskModel.list()
+    await TaskModel.list(req.params.page)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -26,10 +26,10 @@ exports.listAll = async(req, res) => {
 
 exports.delete = async(req, res) => {
     if (await TaskModel.findById(req.params.taskId) == false) {
-        return res.status(400).send();
+        res.status(400).send();
     }
     await TaskModel.delete(req.params.taskId)
-    return res.status(204).send();
+    res.status(204).send();
 }
 
 exports.Patch = async(req, res) => {
@@ -38,5 +38,9 @@ exports.Patch = async(req, res) => {
     } catch (error) {
         console.log(error);
     }
-    return res.status(204).send();
+    res.status(204).send();
+}
+
+exports.Count = async(req, res) => {
+    res.status(200).send(await TaskModel.Count());
 }

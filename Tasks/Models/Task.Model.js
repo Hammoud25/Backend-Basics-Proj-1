@@ -39,20 +39,26 @@ exports.createTask = async function f(taskData) {
     return await task.save();
 };
 
-exports.list = async() => {
-    return await Task.find().then(
-        (result) => {
-            var dtoList = new Array();
-            result.forEach(element => {
-                const dto = new TaskDto(element.id, element.name, element.count, element.isValidated);
-                dtoList.push(dto);
+exports.list = async(page) => {
+    return await Task.find()
+        .limit(10)
+        .skip(page)
+        .sort(1)
+        .then(
+            (result) => {
+                var dtoList = new Array();
+                result.forEach(element => {
+                    const dto = new TaskDto(element.id, element.name, element.count, element.isValidated);
+                    dtoList.push(dto);
+                });
+                return dtoList;
             });
-            return dtoList;
-        });
 };
 
 exports.delete = async(id) => {
-    return await Task.findByIdAndDelete(id);
+    const tasktodelete = await Task.findById(id);
+    await tasktodelete.remove();
+    return;
 }
 
 exports.modify = async(id, data) => {
@@ -63,4 +69,8 @@ exports.modify = async(id, data) => {
         return;
     }
     throw TypeError('Request must have a body!');
+}
+
+exports.Count = async() => {
+    return await Task.count();
 }
